@@ -1,4 +1,8 @@
 #include <iostream>
+#include "Inheritance.h"
+#include "Page.h"
+#include "Polymorphism.h"
+#include "file.h"
 
 const double PI = 3.14159;
 
@@ -712,18 +716,65 @@ void equals(){
     std::cout<<"p2.age:"<<*p2.age<<std::endl;
     std::cout<<"p3.age:"<<*p3.age<<std::endl;
 }
-//4.5.5
+//4.5.6
+class MyPrint{
+public:
+    void operator()(std::string test){
+        std::cout<< test << std::endl;
+    }
+};
+class MyAdd{
+public:
+    int operator()(int a,int b){
+        return a+b;
+    }
+};
+void testfunc(){
+    MyPrint m;
+    m("Hellow World");
+    MyAdd add1;
+    std::cout<< add1(100,66) << std::endl;
 
+    //Anonymous object, destroyed after executing the current line, suitable for performing addition
+    std::cout<< MyAdd()(100,56) << std::endl;
+}
 
 void overload(){
-    equals();
+    testfunc();
+//    equals();
 //    add_add();
 //    add();
 //    out();
 }
+void tset_inher01(){
+    Java java;
+    java.header();
+    java.bottom();
+    java.left();
+    java.content();
+    std::cout<< "------------------------" << std::endl;
+    Python python;
+    python.header();
+    python.bottom();
+    python.left();
+    python.content();
+    std::cout<< "------------------------" << std::endl;
+    CPP cpp;
+    cpp.header();
+    cpp.bottom();
+    cpp.left();
+    cpp.content();
+}
+void Test_Inheritance(){
+    tset_inher01();
+}
 int main() {
+//    testAct();
+//    Test_Inheritance();
+//    test_file1();
+    test_file2();
 //    main_cp();
 //    Test();
-    overload();
+//    overload();
     return 0;
 }
