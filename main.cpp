@@ -128,7 +128,7 @@ void func2(int a,double c, int b){
     std::cout<<"overload 3."<<std::endl;
 }
 //The formal parameter list of C++functions can have a placeholder parameter, which must be filled in when calling the function.
-int func3(int a, int){
+void func3(int a, int){
     std::cout<<"this!"<<std::endl;
 }
 void main_cp(){
@@ -255,7 +255,6 @@ public:
     int age;
 
 };
-
 void class_and_obj(){
     //create object(Instantiation)
     Circle c1;
@@ -303,9 +302,428 @@ void obj_tra(){
     Person3 p4 = do_work2(); //Person3 called
     std::cout<<&p4<<std::endl;
 }
+//4.2.5
+class Person4{
+public:
+    Person4(){
+        std::cout<<"Person4 called"<<std::endl;
+    }
+    Person4(int a, int h){
+        age = a;
+        height = new int(h);  //Release heap data before object destruction
+        std::cout<<"Person4 parametric construction called"<<std::endl;
+    }
+    Person4(const Person4 &p){
+        age = p.age;
+        //Modify default implementation
+        height = new int(*p.height);
+        std::cout<<"Person3 copy construction called"<<std::endl;
+    }
+    ~Person4(){
+        //The code of the destructor function is used to release the data we have opened in the heap area
+        if (height != nullptr){
+            delete height;
+            height = nullptr;
+        }
+        std::cout<<"Person4 dropped"<<std::endl;
+    }
+    int age;
+    int *height;
+
+};
+//The data in the stack here is first in and last out.
+//If the compiler provides a copy constructor, a shallow copy operation will be performed, only copying the address of the data in the heap area.
+void test05(){
+    Person4 p1(18,160);
+    std::cout<<"p1.age:"<<p1.age<<"  p1.height:"<<*p1.height<<std::endl;
+    Person4 p2(p1);
+    std::cout<<"p2.age:"<<p2.age<<"  p2.height:"<<*p2.height<<std::endl;
+}
+//4.2.6
+class Test{
+public:
+    //Traditional initialization operation
+//    Test(int a,int b,int c){
+//        this->a = a;
+//        this->b = b;
+//        this->c = c;
+//    }
+    //new method,Null constructor.
+    Test(int a,int b,int c):a(a),b(b),c(c){
+
+    }
+    int a,b,c;
+};
+void test06(){
+    Test t(30,20,10);
+    std::cout<<"t.a:"<<t.a<<" t.b:"<<t.b<<" t.c:"<<t.c<<std::endl;
+}
+//4.2.8
+class Person5{
+public:
+    Person5(){
+        std::cout<<"Person5 called"<<std::endl;
+    }
+    Person5(int a, int h){
+        age = a;
+        height = new int(h);  //Release heap data before object destruction
+        std::cout<<"Person5 parametric construction called"<<std::endl;
+    }
+    Person5(const Person5 &p){
+        age = p.age;
+        //Modify default implementation
+        height = new int(*p.height);
+        std::cout<<"Person5 copy construction called"<<std::endl;
+    }
+    ~Person5(){
+        //The code of the destructor function is used to release the data we have opened in the heap area
+        if (height != nullptr){
+            delete height;
+            height = nullptr;
+        }
+        std::cout<<"Person5 dropped"<<std::endl;
+    }
+    static int age;
+    int *height;
+
+    static void func(){
+        age = 50;
+        std::cout<< "static function called"<< std::endl;
+    }
+
+};
+int Person5::age = 20;
+void test07(){
+    Person5 person5;
+    std::cout<<person5.age<<std::endl;
+    Person5 p2;
+    p2.age = 30;
+    std::cout<<person5.age<<std::endl;
+    std::cout<<Person5::age<<std::endl;
+    person5.func();
+    Person5::func();
+    std::cout<<person5.age<<std::endl;
+}
+//4.3.1
+class Person6{
+public:
+//    Person6(){
+//        std::cout<<"Person6 called"<<std::endl;
+//    }
+//    Person6(int a, int h){
+//        age = a;
+//        height = new int(h);  //Release heap data before object destruction
+//        std::cout<<"Person6 parametric construction called"<<std::endl;
+//    }
+//    Person6(const Person6 &p){
+//        age = p.age;
+//        //Modify default implementation
+//        height = new int(*p.height);
+//        std::cout<<"Person6 copy construction called"<<std::endl;
+//    }
+//    ~Person6(){
+//        //The code of the destructor function is used to release the data we have opened in the heap area
+//        if (height != nullptr){
+//            delete height;
+//            height = nullptr;
+//        }
+//        std::cout<<"Person6 dropped"<<std::endl;
+//    }
+        int age;
+//    int *height;
+//
+//    static void func(){
+//        age = 50;
+//        std::cout<< "static function called"<< std::endl;
+//    }
+
+};
+void test08(){
+    Person6 p;
+    //Empty objects occupy memory size of 1B
+    std::cout<< sizeof(p)<<std::endl;
+
+}
+//4.3.2
+class Test2{
+public:
+    //Traditional initialization operation
+    Test2(int a,int b,int c){
+        this->a = a;
+        this->b = b;
+        this->c = c;
+    }
+    int a,b,c;
+    //Return the form of a reference
+    Test2& add(Test2 &p){
+        this->a += p.a;
+        return *this;
+    }
+};
+void test09(){
+    Test2 t1(30,20,10);
+    Test2 t2(30,20,10);
+    //Chain programming idea.
+    t2.add(t1).add(t1).add(t1).add(t1).add(t1);
+    std::cout<<"t2.a:"<<t2.a<<" t2.b:"<<t2.b<<" t2.c:"<<t2.c<<std::endl;
+}
+//4.3.3
+class Test3{
+public:
+    void ShowClassName(){
+        std::cout<<"Test3"<<std::endl;
+    }
+    void ShowTestA(){
+        if (this == nullptr){
+            return;
+        }
+        std::cout<<this->a<<std::endl;
+    };
+    int a;
+};
+void test10(){
+    Test3 *p = nullptr;
+    p->ShowClassName();
+    p->ShowTestA();   //The pointer passed in is empty and the variable cannot be accessed.
+}
+//4.3.4
+class Test4{
+public:
+//'this' pointer is essentially a pointer constant, and the direction it points to cannot be modified.Its value can be modified.
+    void showT() const {
+//        this = nullptr;
+        this->b = 100;
+        std::cout<< this->b<<std::endl;
+    }
+    int a;
+    mutable int b;
+};
+void test11(){
+    const Test4 t{};
+    t.showT();
+    t.b = 200;
+    std::cout<< t.b<<std::endl;
+}
+//4.4.1
+class Building{
+    friend void GoodFriend1(Building &building);
+public:
+    std::string SittingRoom;
+
+    Building(){
+        SittingRoom = "SittingRoom";
+        BedRoom = "BedRoom";
+    }
+
+private:
+    std::string BedRoom;
+};
+void GoodFriend1(Building &building){
+    std::cout<<"Good friend is visiting "<< building.SittingRoom << "." <<std::endl;
+    std::cout<<"Good friend is visiting "<< building.BedRoom << "." <<std::endl;
+}
+void test12(){
+    Building b;
+    GoodFriend1(b);
+}
+//4.4.2
+class Building2{
+//    friend void GoodFriend(Building &building);
+    friend class GoodFriend;
+public:
+    std::string SittingRoom;
+
+    Building2(){
+        SittingRoom = "SittingRoom";
+        BedRoom = "BedRoom";
+    }
+
+private:
+    std::string BedRoom;
+};
+class GoodFriend{
+public:
+    GoodFriend(){
+        this->building = new Building2;
+    }
+    void visit(){
+        std::cout<<"Good friend is visiting "<< building->SittingRoom << "." <<std::endl;
+        std::cout<<"Good friend is visiting "<< building->BedRoom << "." <<std::endl;
+    }
+
+    Building2* building;
+};
+void test13(){
+    GoodFriend f;
+    f.visit();
+}
+//4.4.3
+class Building3;
+class GoodFriend2{
+public:
+    GoodFriend2();
+    void visit();
+
+    Building3* building;
+};
+class Building3{
+//    friend void GoodFriend(Building &building);
+//    friend class GoodFriend;
+    friend void GoodFriend2::visit();
+public:
+    std::string SittingRoom;
+
+    Building3(){
+        SittingRoom = "SittingRoom";
+        BedRoom = "BedRoom";
+    }
+
+private:
+    std::string BedRoom;
+};
+GoodFriend2::GoodFriend2(){
+    this->building = new Building3;
+}
+void GoodFriend2::visit(){
+    std::cout<<"Good friend is visiting "<< building->SittingRoom << "." <<std::endl;
+    std::cout<<"Good friend is visiting "<< building->BedRoom << "." <<std::endl;
+}
+void test14(){
+    GoodFriend2 f;
+    f.visit();
+}
+void Test(){
+    test14();
+    test13();
+    test12();
+    test11();
+    class_and_obj();
+    obj_tra();
+    test05();
+    test06();
+    test07();
+    test08();
+    test09();
+    test10();
+}
+//4.5.1
+class Obj{
+public:
+    int a;
+    int b;
+// first method ,member function
+//    Obj operator+(Obj obj){
+//        Obj temp;
+//        temp.a = this->a + obj.a;
+//        temp.b = this->b + obj.b;
+//        return temp;
+//    }
+};
+//second method,global function
+Obj operator+(Obj p1,Obj p2){
+    Obj temp;
+    temp.a = p1.a + p2.a;
+    temp.b = p1.b + p2.b;
+    return temp;
+}
+void add(){
+    Obj o1;
+    o1.a = 10;
+    o1.b = 10;
+    Obj o2;
+    o2.a = 4;
+    o2.b = 7;
+    Obj o3 = o1 + o2;
+    std::cout<< "o3.a:" << o3.a << " o3.b:" << o3.b << std::endl;
+}
+//4.5.2
+//Chain programming
+std::ostream & operator<<(std::ostream &out , Obj o){
+    out<< "a:" << o.a << " b:" << o.b;
+    return out;
+}
+void out(){
+    Obj o;
+    o.a = 10;
+    o.b = 10;
+    std::cout<<o<<std::endl;
+}
+//4.5.3
+class MyInteger{
+    friend std::ostream & operator<<(std::ostream &out , MyInteger o);
+public:
+    MyInteger(){
+        num = 0;
+    }
+    //Overloading pre ++operators
+    MyInteger& operator++(){
+        num++;
+        return *this;
+    }
+    //The int here is a placeholder parameter that can be used to distinguish between pre increment and post increment.
+    MyInteger operator++(int){
+        MyInteger temp = *this;
+        num++;
+        return temp;
+    }
+private:
+    int num;
+};
+std::ostream & operator<<(std::ostream &out , MyInteger o){
+    out<< "num:" << o.num ;
+    return out;
+}
+void add_add(){
+    MyInteger myInteger;
+    std::cout<<++myInteger<< std::endl;
+    std::cout<<myInteger<< std::endl;
+    std::cout<<myInteger++<< std::endl;
+    std::cout<<myInteger<< std::endl;
+}
+//4.5.4
+class Persons{
+public:
+    Persons(int age){
+        this->age = new int (age);
+    }
+    ~Persons(){
+        if(age != nullptr){
+            delete age;
+            age = nullptr;
+        }
+    }
+    Persons& operator=(Persons &p){
+        //check if there are any attributes in the heap area firstly. If so, release them thoroughly before making a deep copy.
+        if (age != nullptr){
+            delete age;
+            age = nullptr;
+        }
+        this->age = new int (*p.age);
+        return *this;
+    }
+    int *age;
+};
+void equals(){
+    Persons p1(18);
+    std::cout<<"p1.age:"<<*p1.age<<std::endl;
+    Persons p2(20);
+    Persons p3(30);
+    p3 = p2 = p1;
+    std::cout<<"p2.age:"<<*p2.age<<std::endl;
+    std::cout<<"p3.age:"<<*p3.age<<std::endl;
+}
+//4.5.5
+
+
+void overload(){
+    equals();
+//    add_add();
+//    add();
+//    out();
+}
 int main() {
 //    main_cp();
-//    class_and_obj();
-    obj_tra();
+//    Test();
+    overload();
     return 0;
 }
