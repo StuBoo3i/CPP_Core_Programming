@@ -395,3 +395,241 @@ If there are attributes pointing to the heap area in the class, performing assig
 Solve shallow copy problems by overloading assignment operators.
 
 4.5.5 Overloading of relational operators
+4.5.6 Function Call Operator Overloading
+
+1. The function call operator () can also be overloaded.
+
+2. Due to the fact that the method used after overloading is very similar to function calls, it becomes a generic function.
+
+3. The imitation function has no fixed writing method and is very flexible.
+
+4.6 Inheritance
+
+4.6.1 Basic Grammar
+
+Class subclass: Inheritance method parent class{
+
+
+}
+
+Subclass, also known as derived class, and parent class, also known as base class.
+
+4.6.2 Inheritance method
+
+1. Public inheritance
+
+2. Protection of inheritance
+
+3. Private inheritance
+
+The private members of the parent class cannot be accessed regardless of the inheritance method of the subclass.
+
+Public inheritance keeps the properties of members inherited from the parent class unchanged; Protect inheritance to make public members inherited by subclasses protected members; Private inheritance makes all members inherited by subclasses private.
+
+Unable to access outside of the protection permission class.
+
+4.6.3 Object Model in Inheritance
+
+Private members in the parent class are only hidden during the inheritance process, but they will still inherit, meaning that all non static member properties in the parent class will be inherited by the subclass.
+
+Using developer command prompt tools to view object models:
+
+1. Jump to the folder where the CPP file is located, cd/
+
+2. View command: cl/d1 reportSingleClassLayout class name file name
+
+4.6.4 Construction and Deconstruction Order in Inheritance
+
+When generating a subclass object, the parent class object needs to be constructed first, and then the subclass object needs to be constructed. When deconstructing, the subclass object needs to be deconstructed first, and then the parent class object needs to be deconstructed.
+
+4.6.5 Inheritance · How to handle members with the same name
+
+1. Access the member of the subclass with the same name directly.
+
+2. To access a member of the parent class with the same name, a scope needs to be added.
+
+e. G. 'Son s; s. Base:: a‘
+
+If a member function with the same name as the parent class appears in a subclass, the same name member of the subclass will cause all members with the same name in the parent class to be hidden.
+
+4.6.6 Handling of Inheriting Static Members with the Same Name
+
+1. Access the member of the subclass with the same name directly.
+
+2. To access a member of the parent class with the same name, a scope needs to be added.
+
+4.6.7 Multiple Inheritance Grammar
+
+C++allows a class to inherit multiple classes
+
+Syntax: class subclass: inheritance method parent class 1, inheritance method parent class 2, inheritance method parent class 3
+
+Multiple inheritance may cause the appearance of members with the same name in the parent class, which needs to be distinguished by adding a scope.
+
+It is not recommended to use multiple inheritance in actual development of C++.
+
+4.6.8 Diamond Inheritance
+
+Concept:
+
+1. Two derived classes inherit from the same base class.
+
+2. A certain class inherits both derived classes simultaneously.
+
+3. It is called diamond inheritance or diamond inheritance.
+
+The data from the original base class inherits two copies, but only one copy is needed.
+
+The use of virtual inheritance can solve the problem of diamond inheritance, which involves adding the 'virtual' keyword before inheritance to become virtual inheritance. The base class is called a virtual base class.
+
+Virtual inheritance uses a virtual base class pointer vbptr to point to the virtual base class table vbtable, which records the offsets of different members, resulting in only one duplicate member.
+
+4.7 Polymorphism
+
+4.7.1 Basic concepts
+
+1. Static polymorphism: Function overload and operator overload belong to static polymorphism, reusing function names.
+
+2. Dynamic polymorphism: Derived classes and virtual functions implement runtime polymorphism
+
+The difference between the two:
+
+1. Static polymorphic function address early binding - determine function address during compilation phase
+
+2. Dynamic polymorphism of function address late binding - determining function address during runtime
+
+Dynamic polymorphism satisfies the condition
+
+*1. There is an inheritance relationship
+
+*2. Subclass rewrites parent class virtual function
+
+*Rewrite: The return value type, function name, and parameter list of the function must be exactly the same.
+
+*The virtual function of subclass rewritten virtual functions can be written or not written
+
+Principle:
+
+*When there is a virtual function in the parent class, the object of the class will generate a virtual function (table) pointer vfptr (4B), which points to the virtual function table vftable, which records the virtual function.
+
+*When a subclass does not rewrite a virtual function, it inherits the virtual function pointer. After rewriting the virtual function, the virtual function table of the subclass is overwritten, and the pointer points to the virtual function address of the subclass. When the pointer or reference of the parent class points to the subclass object, polymorphism occurs.
+
+The advantages of polymorphism:
+
+1. Clear code organization structure
+
+2. Strong readability
+
+3. Beneficial for expansion and maintenance in the early and later stages
+
+4.7.3 Pure Virtual Functions and Abstract Classes
+
+In polymorphism, the implementation of virtual functions in the parent class is usually meaningless, mainly by calling the content rewritten by the subclass, so virtual functions can be changed to pure virtual functions.
+
+Syntax: virtual returns value type function name (parameter list)=0;
+
+When there is a pure virtual function in a class, it can be called an abstract class.
+
+The characteristics of abstract classes:
+
+1. Unable to instantiate
+
+2. Subclasses must override pure virtual functions in abstract classes, otherwise they also belong to abstract classes.
+
+4.7.5 Virtual and Pure Virtual Structures
+
+When using polymorphism, if a property in a subclass is opened to the heap, the parent class pointer cannot call the destructor code of the subclass when released
+
+Solution: Change the destructor in the parent class to virtual or pure virtual destruction
+
+Commonalities between virtual and pure virtual structures:
+
+1. Can solve the problem of releasing subclass objects from parent class pointers
+
+2. Both require specific function implementations
+
+Difference:
+
+If it is a pure virtual destructor, the class belongs to an abstract class and cannot be instantiated, but pure virtual destructors sometimes require both declaration and implementation.
+
+5 file operations
+
+The data generated during program runtime belongs to temporary data, which will be released once the program finishes running. Data can be persisted through files, and file operations in C++need to include header files<fstream>
+
+There are two types of files:
+
+1. Text file - The file is stored in ASCII format as text on the computer
+
+2. Binary Files - Files are stored in binary form as text on a computer, and users generally cannot directly understand them
+
+There are three main categories of operating files:
+
+1. of stream: write operation
+
+2. ifstream: read operation
+
+3. fstream: read and write operations
+
+5.1 Text files
+
+5.1.1 Writing Files
+
+The steps for writing a file are as follows:
+
+1. Include header file: # include<fstream>
+
+2. Create a stream object: ofstream of s;
+
+3. Open file: ofs. open ("file path", opening method);
+
+4. Write data: of s<<"written data";
+
+5. Close file: of s. close();
+
+File opening method:
+
+Explanation of opening method
+
+Ios:: in Open file for reading
+
+Ios:: out Open file for writing
+
+Ios:: ate Initial position: End of file
+
+IOS:: App append method for writing files
+
+Ios:: trunk If the file exists, delete it first and then create it again
+
+Los:: binary binary mode
+
+Note: The file opening method can be used in conjunction with the | operator
+
+For example, writing files in binary format ios:: binary | ios:: out
+
+5.1.2 Reading Files
+
+The steps to read a file are as follows:
+
+1. Include header file: # include<fstream>
+
+2. Create a stream object: ifstream ifs;
+
+3. Open the file and check if it was successfully opened: ifs. open ("file path", opening method);
+
+4. Data reading: Four ways to read
+
+5. Close file: ifs. close();
+
+5.2 Binary files
+
+5.2.1 Writing
+
+Call the write function: ostream&write (const char * buffer, int len);
+
+The character pointer buffer points to a storage space in memory, where len is the number of bytes.
+
+5.2.2 Reading
+
+Call the read function: istream&read (const char * buffer, int len);
+
+The character pointer buffer points to a storage space in memory, where len is the number of bytes.
